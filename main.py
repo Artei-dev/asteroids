@@ -40,6 +40,10 @@ def main():
                 print("Game Over!")
                 sys.exit(69)
 
+            for shot in shots:
+                if shot.is_colliding(asteroid):
+                    asteroid.kill(); shot.kill()
+
         for obj in updateable:
             obj.update(dt)
 
