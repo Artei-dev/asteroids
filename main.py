@@ -7,6 +7,7 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 
+
 def main():
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
@@ -16,6 +17,7 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption('SuperAsteroids')
 
     # groups - drawable and updateable
     drawable = pygame.sprite.Group()
@@ -32,13 +34,13 @@ def main():
     Shot.containers = (shots, updateable, drawable)
 
     dt = 0
-    while True:
+    while player.health != 0:
         screen.fill("black")
+        player.draw_health(screen)
 
         for asteroid in asteroids:
             if player.is_colliding(asteroid):
-                print("Game Over!")
-                sys.exit(69)
+                player.get_damage()
 
             for shot in shots:
                 if shot.is_colliding(asteroid):
