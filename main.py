@@ -6,6 +6,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from user_interface import UI
 
 
 def main():
@@ -33,11 +34,12 @@ def main():
     asteroid_field = AsteroidField()
     Shot.containers = (shots, updateable, drawable)
 
-    dt = 0
-    while player.health != 0:
-        screen.fill("black")
-        player.draw_health(screen)
+    # UI
+    ui = UI(screen)
 
+    dt = 0
+    while player.lifes != 0:
+        screen.fill("black")
         for asteroid in asteroids:
             if player.is_colliding(asteroid):
                 player.get_damage()
@@ -51,6 +53,9 @@ def main():
 
         for obj in drawable:
             obj.draw(screen)
+
+        ui.lifes = player.lifes
+        ui.draw()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

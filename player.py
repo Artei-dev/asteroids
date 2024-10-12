@@ -3,12 +3,12 @@ import os
 
 from circleshape import CircleShape
 from shot import Shot
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN, PLAYER_STARTING_HEALTH
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN, PLAYER_STARTING_LIFES
 
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
-        self.health = PLAYER_STARTING_HEALTH
+        self.lifes = PLAYER_STARTING_LIFES
         self.rotation = 180
         self.timer = 0
 
@@ -21,15 +21,8 @@ class Player(CircleShape):
         c = self.position - forward * self.radius + right
         return [a, b, c]
 
-    def draw_health(self, screen):
-        image = pygame.image.load(os.path.join('assets', 'heart.png'))
-        image = pygame.transform.scale(image, (50, 50))
-        for i in range(self.health):
-            screen.blit(image, (5 + i*50, 5))
-
     def draw(self, screen):
         pygame.draw.polygon(screen, "red", self.triangle(), 2)
-        self.draw_health(screen)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -45,7 +38,7 @@ class Player(CircleShape):
             self.timer = PLAYER_SHOOT_COOLDOWN
 
     def get_damage(self):
-        self.health -= 1
+        self.lifes -= 1
         self.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     def update(self, dt):

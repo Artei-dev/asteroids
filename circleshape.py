@@ -1,8 +1,6 @@
 import pygame
 from typing import Self
 
-import math
-
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
     def __init__(self, x, y, radius):
@@ -21,7 +19,6 @@ class CircleShape(pygame.sprite.Sprite):
             return True
 
         return False
-
 
     def draw(self, screen):
         # sub-classes must override
