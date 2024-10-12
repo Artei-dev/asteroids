@@ -1,8 +1,11 @@
 import pygame
 
 from circleshape import CircleShape
+from groups import shots, updateable, drawable
 
 class Shot(CircleShape):
+    containers = (shots, updateable, drawable)
+
     def __init__(self, x, y):
         super().__init__(x, y, radius=5)
 

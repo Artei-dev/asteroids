@@ -1,5 +1,4 @@
 import pygame
-import sys
 
 from constants import *
 from player import Player
@@ -7,46 +6,45 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 from user_interface import UI
+from groups import asteroids, drawable, updateable, shots
 
+
+def check_for_collisions(player: Player) -> int:
+    score = 0
+    for asteroid in asteroids:
+        if player.is_colliding(asteroid):
+            player.get_damage()
+
+        for shot in shots:
+            if shot.is_colliding(asteroid):
+                score += 100 - asteroid.radius
+                asteroid.split(); shot.kill()
+    return score
 
 def main():
-    print("Starting asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
-
     # init
     pygame.init()
-    clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('SuperAsteroids')
 
-    # groups - drawable and updateable
-    drawable = pygame.sprite.Group()
-    updateable = pygame.sprite.Group()
-    asteroids = pygame.sprite.Group()
-    shots = pygame.sprite.Group()
-
-    # player related
-    Player.containers = (drawable, updateable)
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    Asteroid.containers = (asteroids, updateable, drawable)
-    AsteroidField.containers = (updateable)
-    asteroid_field = AsteroidField()
-    Shot.containers = (shots, updateable, drawable)
-
     # UI
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     ui = UI(screen)
 
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
+    # clock related
+    clock = pygame.time.Clock()
     dt = 0
+
+    # Spawns new asteroids
+    AsteroidField()
+
+    score = 0
+    # Game loop
     while player.lifes != 0:
         screen.fill("black")
-        for asteroid in asteroids:
-            if player.is_colliding(asteroid):
-                player.get_damage()
 
-            for shot in shots:
-                if shot.is_colliding(asteroid):
-                    asteroid.split(); shot.kill()
+        score += check_for_collisions(player)
 
         for obj in updateable:
             obj.update(dt)
@@ -54,8 +52,7 @@ def main():
         for obj in drawable:
             obj.draw(screen)
 
-        ui.lifes = player.lifes
-        ui.draw()
+        ui.draw(score=score, lifes=player.lifes)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

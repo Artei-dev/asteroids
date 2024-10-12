@@ -4,8 +4,11 @@ import os
 from circleshape import CircleShape
 from shot import Shot
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN, PLAYER_STARTING_LIFES
+from groups import drawable, updateable
 
 class Player(CircleShape):
+    containers = (drawable, updateable)
+
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.lifes = PLAYER_STARTING_LIFES

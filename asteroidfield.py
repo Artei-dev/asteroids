@@ -1,9 +1,14 @@
 import pygame
 import random
+
 from asteroid import Asteroid
 from constants import *
+from groups import updateable
+
 
 class AsteroidField(pygame.sprite.Sprite):
+    containers = (updateable)
+
     # We define edges of the screen
     edges = [
         [

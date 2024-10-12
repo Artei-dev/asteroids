@@ -3,8 +3,11 @@ import random
 
 from circleshape import CircleShape
 from constants import ASTEROID_MIN_RADIUS
+from groups import asteroids, updateable, drawable
 
 class Asteroid(CircleShape):
+    containers = (asteroids, updateable, drawable)
+
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
 
