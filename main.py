@@ -42,7 +42,7 @@ def main():
 
             for shot in shots:
                 if shot.is_colliding(asteroid):
-                    asteroid.kill(); shot.kill()
+                    asteroid.split(); shot.kill()
 
         for obj in updateable:
             obj.update(dt)
@@ -56,7 +56,6 @@ def main():
 
         dt = clock.tick(60) / 1000
         pygame.display.flip()
-
 
 if __name__ == "__main__":
     main()
