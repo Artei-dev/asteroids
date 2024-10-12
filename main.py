@@ -33,7 +33,7 @@ def main():
 
     dt = 0
     while True:
-        screen.fill((0, 0, 0))
+        screen.fill("black")
 
         for asteroid in asteroids:
             if player.is_colliding(asteroid):
