@@ -1,5 +1,4 @@
 import pygame
-import os
 
 from circleshape import CircleShape
 from shot import Shot
@@ -12,8 +11,10 @@ class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.lifes = PLAYER_STARTING_LIFES
-        self.rotation = 180
-        self.timer = 0
+        self.rotation = 0
+        self.shoot_cooldown = 0
+
+        self.untouchable_timer = 0
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -23,6 +24,12 @@ class Player(CircleShape):
         b = self.position - forward * self.radius - right
         c = self.position - forward * self.radius + right
         return [a, b, c]
+
+    def is_colliding(self, other) -> bool:
+        if self.untouchable_timer > 0:
+            return False
+
+        return super().is_colliding(other)
 
     def draw(self, screen):
         pygame.draw.polygon(screen, "red", self.triangle(), 2)
@@ -35,13 +42,15 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
 
     def shoot(self):
-        if not self.timer > 0:
+        if not self.shoot_cooldown > 0:
             shot = Shot(self.position.x, self.position.y)
             shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-            self.timer = PLAYER_SHOOT_COOLDOWN
+            self.shoot_cooldown = PLAYER_SHOOT_COOLDOWN
 
     def get_damage(self):
         self.lifes -= 1
+        self.untouchable = True
+        self.untouchable_timer = 5
         self.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     def update(self, dt):
@@ -58,4 +67,5 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
-        self.timer -= dt
+        self.shoot_cooldown -= dt
+        self.untouchable_timer -= dt

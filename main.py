@@ -2,15 +2,13 @@ import pygame
 
 from constants import *
 from player import Player
-from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from shot import Shot
 from user_interface import UI
 from groups import asteroids, drawable, updateable, shots
 
-
 def check_for_collisions(player: Player) -> int:
     score = 0
+
     for asteroid in asteroids:
         if player.is_colliding(asteroid):
             player.get_damage()
@@ -24,7 +22,7 @@ def check_for_collisions(player: Player) -> int:
 def main():
     # init
     pygame.init()
-    pygame.display.set_caption('SuperAsteroids')
+    pygame.display.set_caption('Super Asteroids')
 
     # UI
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -35,6 +33,7 @@ def main():
     # clock related
     clock = pygame.time.Clock()
     dt = 0
+
 
     # Spawns new asteroids
     AsteroidField()
@@ -52,7 +51,7 @@ def main():
         for obj in drawable:
             obj.draw(screen)
 
-        ui.draw(score=score, lifes=player.lifes)
+        ui.draw(score=score, player=player)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
