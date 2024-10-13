@@ -16,7 +16,6 @@ class Asteroid(CircleShape):
 
     def __create_child(self, angle):
         new_radius = self.radius - ASTEROID_MIN_RADIUS
-
         new_vel = self.velocity.rotate(angle)
         smaller_asteroid = Asteroid(self.position.x, self.position.y, new_radius)
         smaller_asteroid.velocity = new_vel * 1.2
